@@ -30,6 +30,10 @@ public class Sweet {
         return quantity;
     }
 
+    public double calculatePriceFor(int count) {
+        return price * count;
+    }
+
     public void purchase(int count) {
         validatePurchase(count);
         this.quantity -= count;
@@ -44,9 +48,6 @@ public class Sweet {
         }
     }
 
-    public double calculatePriceFor(int count) {
-        return price * count;
-    }
 
 
 
