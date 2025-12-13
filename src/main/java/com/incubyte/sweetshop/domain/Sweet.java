@@ -31,11 +31,20 @@ public class Sweet {
     }
 
     public void purchase(int count) {
+        validatePurchase(count);
+        this.quantity -= count;
+    }
+
+    private void validatePurchase(int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("Purchase quantity must be positive");
+        }
         if (count > quantity) {
             throw new IllegalStateException("Insufficient stock");
         }
-        this.quantity -= count;
     }
+
+
 
 
 }
