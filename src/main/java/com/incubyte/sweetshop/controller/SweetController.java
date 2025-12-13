@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 import java.util.List;
@@ -56,6 +59,18 @@ public class SweetController {
     public void deleteSweet(@PathVariable Long id) {
         sweetRepository.deleteById(id);
     }
+
+    @PostMapping("/{id}/purchase")
+    public Sweet purchaseSweet(@PathVariable Long id,
+                               @RequestParam int quantity) {
+
+        Sweet sweet = sweetRepository.findById(id).get();
+
+        sweet.setQuantity(sweet.getQuantity() - quantity);
+
+        return sweetRepository.save(sweet);
+    }
+
 
 
 }
