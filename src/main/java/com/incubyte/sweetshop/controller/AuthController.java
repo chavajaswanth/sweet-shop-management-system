@@ -22,4 +22,13 @@ public class AuthController {
                 ));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(
+            @RequestBody AuthRequest request
+    ) {
+        return ResponseEntity.ok(
+                Map.of("token", "dummy-jwt-token")
+        );
+    }
+
 }
