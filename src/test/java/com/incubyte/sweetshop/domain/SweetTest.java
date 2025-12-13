@@ -37,4 +37,18 @@ class SweetTest {
         });
     }
 
+    @Test
+    void shouldNotAllowPurchaseWithInvalidQuantity() {
+        Sweet sweet = new Sweet("Ladoo", "Indian", 10.0, 10);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            sweet.purchase(0);
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            sweet.purchase(-2);
+        });
+    }
+
+
 }
