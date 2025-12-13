@@ -5,6 +5,8 @@ import com.incubyte.sweetshop.repository.SweetRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/sweets")
 public class SweetController {
@@ -19,5 +21,10 @@ public class SweetController {
     @ResponseStatus(HttpStatus.CREATED)
     public Sweet createSweet(@RequestBody Sweet sweet) {
         return sweetRepository.save(sweet);
+    }
+
+    @GetMapping
+    public List<Sweet> getAllSweets() {
+        return sweetRepository.findAll();
     }
 }
