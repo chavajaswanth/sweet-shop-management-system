@@ -44,6 +44,10 @@ public class Sweet {
         }
     }
 
+    public double calculatePriceFor(int count) {
+        return price * count;
+    }
+
 
 
 
