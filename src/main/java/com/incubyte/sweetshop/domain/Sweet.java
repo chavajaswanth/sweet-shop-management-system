@@ -31,6 +31,7 @@ public class Sweet {
     }
 
     public double calculatePriceFor(int count) {
+        validatePurchase(count);
         return price * count;
     }
 
@@ -47,9 +48,6 @@ public class Sweet {
             throw new IllegalStateException("Insufficient stock");
         }
     }
-
-
-
 
 
 }
