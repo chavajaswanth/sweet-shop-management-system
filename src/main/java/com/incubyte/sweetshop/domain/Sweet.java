@@ -49,6 +49,11 @@ public class Sweet {
         return quantity;
     }
 
+    public void setName(String name) { this.name = name; }
+    public void setCategory(String category) { this.category = category; }
+    public void setPrice(double price) { this.price = price; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
     public double calculatePriceFor(int count) {
         validatePurchase(count);
         return price * count;

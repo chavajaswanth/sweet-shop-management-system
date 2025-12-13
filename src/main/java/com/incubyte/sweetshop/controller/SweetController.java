@@ -33,4 +33,17 @@ public class SweetController {
         return sweetRepository.findByNameContainingIgnoreCase(name);
     }
 
+
+    @PutMapping("/{id}")
+    public Sweet updateSweet(@PathVariable Long id, @RequestBody Sweet updatedSweet) {
+        Sweet existingSweet = sweetRepository.findById(id).get();
+
+        existingSweet.setName(updatedSweet.getName());
+        existingSweet.setCategory(updatedSweet.getCategory());
+        existingSweet.setPrice(updatedSweet.getPrice());
+        existingSweet.setQuantity(updatedSweet.getQuantity());
+
+        return sweetRepository.save(existingSweet);
+    }
+
 }
