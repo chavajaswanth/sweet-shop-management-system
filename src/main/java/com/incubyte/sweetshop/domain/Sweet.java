@@ -5,7 +5,7 @@ public class Sweet {
     private final String name;
     private final String category;
     private final double price;
-    private final int quantity;
+    private int quantity;
 
     public Sweet(String name, String category, double price, int quantity) {
         this.name = name;
@@ -29,4 +29,9 @@ public class Sweet {
     public int getQuantity() {
         return quantity;
     }
+
+    public void purchase(int count) {
+        this.quantity -= count;
+    }
+
 }
