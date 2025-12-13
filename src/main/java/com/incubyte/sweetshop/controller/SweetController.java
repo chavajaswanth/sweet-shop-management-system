@@ -27,4 +27,10 @@ public class SweetController {
     public List<Sweet> getAllSweets() {
         return sweetRepository.findAll();
     }
+
+    @GetMapping("/search")
+    public List<Sweet> searchSweets(@RequestParam String name) {
+        return sweetRepository.findByNameContainingIgnoreCase(name);
+    }
+
 }
