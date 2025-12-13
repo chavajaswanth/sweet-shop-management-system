@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 class SweetTest {
 
     @Test
@@ -23,6 +26,15 @@ class SweetTest {
         sweet.purchase(3);
 
         assertEquals(7, sweet.getQuantity());
+    }
+
+    @Test
+    void shouldNotAllowPurchaseWhenQuantityIsInsufficient() {
+        Sweet sweet = new Sweet("Ladoo", "Indian", 10.0, 5);
+
+        assertThrows(IllegalStateException.class, () -> {
+            sweet.purchase(10);
+        });
     }
 
 }
