@@ -1,5 +1,6 @@
 package com.incubyte.sweetshop.controller;
 
+import com.incubyte.sweetshop.security.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,13 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> login(
             @RequestBody AuthRequest request
     ) {
+        String token = JwtUtil.generateToken(request.username);
+
         return ResponseEntity.ok(
-                Map.of("token", "dummy-jwt-token")
+                Map.of("token", token)
         );
     }
+
+
 
 }
