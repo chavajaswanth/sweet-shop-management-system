@@ -51,4 +51,14 @@ class SweetTest {
     }
 
 
+    @Test
+    void shouldCalculateTotalPriceForGivenQuantity() {
+        Sweet sweet = new Sweet("Ladoo", "Indian", 10.0, 10);
+
+        double totalPrice = sweet.calculatePriceFor(3);
+
+        assertEquals(30.0, totalPrice);
+    }
+
+
 }
