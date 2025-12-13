@@ -1,28 +1,33 @@
 package com.incubyte.sweetshop.security;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
-    private static final SecretKey KEY =
-            Keys.hmacShaKeyFor(
-                    "my-super-secret-key-my-super-secret-key"
-                            .getBytes(StandardCharsets.UTF_8)
-            );
+    private final Key key;
 
-    public static String generateToken(String username) {
+    public JwtUtil(String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public JwtUtil() {
+        this("mysecretkeymysecretkeymysecretkey");
+    }
+
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + 60 * 60 * 1000)
-                )
-                .signWith(KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hr
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 }
