@@ -1,17 +1,36 @@
 package com.incubyte.sweetshop.domain;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Sweet {
 
-    private final String name;
-    private final String category;
-    private final double price;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String category;
+    private double price;
     private int quantity;
+
+    protected Sweet() {
+        // required by JPA
+    }
 
     public Sweet(String name, String category, double price, int quantity) {
         this.name = name;
         this.category = category;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
