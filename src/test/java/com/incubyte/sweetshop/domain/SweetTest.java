@@ -15,4 +15,14 @@ class SweetTest {
         assertEquals(10.0, sweet.getPrice());
         assertEquals(5, sweet.getQuantity());
     }
+
+    @Test
+    void shouldReduceQuantityWhenSweetIsPurchased() {
+        Sweet sweet = new Sweet("Ladoo", "Indian", 10.0, 10);
+
+        sweet.purchase(3);
+
+        assertEquals(7, sweet.getQuantity());
+    }
+
 }
