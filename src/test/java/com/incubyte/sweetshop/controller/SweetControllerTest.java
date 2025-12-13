@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.mockito.Mockito.verify;
+
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -110,6 +113,16 @@ class SweetControllerTest {
                 .andExpect(jsonPath("$.name").value("Ladoo Deluxe"))
                 .andExpect(jsonPath("$.price").value(12.0))
                 .andExpect(jsonPath("$.quantity").value(25));
+    }
+
+    @Test
+    void shouldDeleteSweetById() throws Exception {
+        when(sweetRepository.existsById(1L)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/sweets/{id}", 1L))
+                .andExpect(status().isNoContent());
+
+        verify(sweetRepository).deleteById(1L);
     }
 
 
