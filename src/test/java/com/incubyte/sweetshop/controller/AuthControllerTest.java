@@ -46,4 +46,22 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.username").value("jaswanth"))
                 .andExpect(jsonPath("$.role").value("USER"));
     }
+
+    @Test
+    void shouldLoginUserAndReturnJwtToken() throws Exception {
+
+        String requestBody = """
+        {
+          "username": "jaswanth",
+          "password": "password123"
+        }
+        """;
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").exists());
+    }
+
 }
