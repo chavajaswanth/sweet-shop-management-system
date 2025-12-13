@@ -31,7 +31,11 @@ public class Sweet {
     }
 
     public void purchase(int count) {
+        if (count > quantity) {
+            throw new IllegalStateException("Insufficient stock");
+        }
         this.quantity -= count;
     }
+
 
 }
