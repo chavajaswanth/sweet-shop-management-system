@@ -125,6 +125,19 @@ class SweetControllerTest {
         verify(sweetRepository).deleteById(1L);
     }
 
+    @Test
+    void shouldPurchaseSweetAndReduceQuantity() throws Exception {
+        Sweet existing = new Sweet("Ladoo", "Indian", 10.0, 20);
+
+        when(sweetRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(sweetRepository.save(any(Sweet.class))).thenReturn(existing);
+
+        mockMvc.perform(post("/api/sweets/{id}/purchase", 1L)
+                        .param("quantity", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity").value(15));
+    }
+
 
 
 }
