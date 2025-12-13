@@ -70,4 +70,19 @@ class SweetControllerTest {
                 .andExpect(jsonPath("$[1].name").value("Barfi"));
     }
 
+    @Test
+    void shouldSearchSweetsByName() throws Exception {
+        Sweet sweet = new Sweet("Ladoo", "Indian", 10.0, 20);
+
+        when(sweetRepository.findByNameContainingIgnoreCase("lad"))
+                .thenReturn(List.of(sweet));
+
+        mockMvc.perform(get("/api/sweets/search")
+                        .param("name", "lad"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Ladoo"));
+    }
+
+
 }
