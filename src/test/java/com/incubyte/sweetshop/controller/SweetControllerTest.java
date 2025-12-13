@@ -1,5 +1,9 @@
 package com.incubyte.sweetshop.controller;
 
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.incubyte.sweetshop.domain.Sweet;
 import com.incubyte.sweetshop.repository.SweetRepository;
@@ -51,4 +55,19 @@ class SweetControllerTest {
                 .andExpect(jsonPath("$.price").value(10.0))
                 .andExpect(jsonPath("$.quantity").value(20));
     }
+
+    @Test
+    void shouldReturnAllSweets() throws Exception {
+        Sweet sweet1 = new Sweet("Ladoo", "Indian", 10.0, 20);
+        Sweet sweet2 = new Sweet("Barfi", "Indian", 15.0, 10);
+
+        when(sweetRepository.findAll()).thenReturn(List.of(sweet1, sweet2));
+
+        mockMvc.perform(get("/api/sweets"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Ladoo"))
+                .andExpect(jsonPath("$[1].name").value("Barfi"));
+    }
+
 }
