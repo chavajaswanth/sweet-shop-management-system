@@ -28,4 +28,19 @@ class JwtUtilTest {
 
         assertThat(claims.get("role")).isEqualTo("USER");
     }
+
+    @Test
+    void shouldExtractUsernameFromToken() {
+
+        JwtUtil jwtUtil = new JwtUtil(
+                "mysecretkeymysecretkeymysecretkey"
+        );
+
+        String token = jwtUtil.generateToken("jaswanth", "USER");
+
+        String username = jwtUtil.extractUsername(token);
+
+        assertThat(username).isEqualTo("jaswanth");
+    }
+
 }
