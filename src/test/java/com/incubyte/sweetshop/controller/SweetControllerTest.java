@@ -1,8 +1,11 @@
 package com.incubyte.sweetshop.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.incubyte.sweetshop.domain.Sweet;
@@ -83,6 +86,32 @@ class SweetControllerTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].name").value("Ladoo"));
     }
+
+    @Test
+    void shouldUpdateSweetById() throws Exception {
+        Sweet existing = new Sweet("Ladoo", "Indian", 10.0, 20);
+
+        when(sweetRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(sweetRepository.save(any(Sweet.class))).thenReturn(existing);
+
+        String requestBody = """
+        {
+          "name": "Ladoo Deluxe",
+          "category": "Indian",
+          "price": 12.0,
+          "quantity": 25
+        }
+        """;
+
+        mockMvc.perform(put("/api/sweets/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Ladoo Deluxe"))
+                .andExpect(jsonPath("$.price").value(12.0))
+                .andExpect(jsonPath("$.quantity").value(25));
+    }
+
 
 
 }
