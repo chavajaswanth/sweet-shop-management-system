@@ -71,6 +71,15 @@ public class SweetController {
         return sweetRepository.save(sweet);
     }
 
+    @PostMapping("/{id}/restock")
+    public Sweet restockSweet(@PathVariable Long id,
+                              @RequestParam int quantity) {
+
+        Sweet sweet = sweetRepository.findById(id).get();
+        sweet.setQuantity(sweet.getQuantity() + quantity);
+        return sweetRepository.save(sweet);
+    }
+
 
 
 }
