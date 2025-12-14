@@ -57,8 +57,7 @@ A secure and scalable backend REST API for managing a sweet shop, built using **
 POST /api/auth/register
 POST /api/auth/login
 
-shell
-Copy code
+
 
 ### Sweets (JWT Protected)
 POST /api/sweets
@@ -67,15 +66,13 @@ GET /api/sweets/search?name=lad
 PUT /api/sweets/{id}
 DELETE /api/sweets/{id} (ADMIN only)
 
-shell
-Copy code
+
 
 ### Inventory (JWT Protected)
 POST /api/sweets/{id}/purchase?quantity=5
 POST /api/sweets/{id}/restock?quantity=10 (ADMIN only)
 
-yaml
-Copy code
+
 
 ---
 
@@ -102,9 +99,6 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.open-in-view=false
 
-yaml
-Copy code
-
 ---
 
 ##  How to Run
@@ -119,14 +113,12 @@ git clone https://github.com/chavajaswanth/sweetshop.git
 cd sweetshop
 mvn clean spring-boot:run
 
-yaml
-Copy code
+
 
 Application runs at:
 http://localhost:8080
 
-yaml
-Copy code
+
 
 ---
 
@@ -135,16 +127,13 @@ Copy code
 1. Login to get JWT token:
 POST /api/auth/login
 
-sql
-Copy code
+
 
 2. Copy the token from response
 
 3. Add Header in protected APIs:
 Authorization: Bearer <JWT_TOKEN>
 
-yaml
-Copy code
 
 ---
 
