@@ -43,4 +43,16 @@ class JwtUtilTest {
         assertThat(username).isEqualTo("jaswanth");
     }
 
+    @Test
+    void shouldValidateTokenForCorrectUser() {
+        JwtUtil jwtUtil = new JwtUtil("mysecretkeymysecretkeymysecretkey");
+
+        String token = jwtUtil.generateToken("jaswanth", "USER");
+
+        boolean isValid = jwtUtil.isTokenValid(token, "jaswanth");
+
+        assertThat(isValid).isTrue();
+    }
+
+
 }
