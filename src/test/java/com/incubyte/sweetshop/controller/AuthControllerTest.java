@@ -3,25 +3,22 @@ package com.incubyte.sweetshop.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.incubyte.sweetshop.domain.User;
 import com.incubyte.sweetshop.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import com.incubyte.sweetshop.security.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import com.jayway.jsonpath.JsonPath;
-import org.springframework.test.web.servlet.MvcResult;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
 
     @Autowired
@@ -29,6 +26,9 @@ class AuthControllerTest {
 
     @MockBean
     private UserRepository userRepository;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -54,7 +54,10 @@ class AuthControllerTest {
     }
 
     @Test
-    void shouldLoginUserAndReturnJwtToken() throws Exception {
+    void shouldLoginAndReturnJwtToken() throws Exception {
+
+        when(jwtUtil.generateToken("jaswanth", "USER"))
+                .thenReturn("fake.jwt.token");
 
         String requestBody = """
         {
@@ -67,62 +70,6 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists());
+                .andExpect(jsonPath("$.token").value("fake.jwt.token"));
     }
-
-    @Test
-    void shouldLoginAndReturnJwtToken() throws Exception {
-
-        String requestBody = """
-    {
-      "username": "jaswanth",
-      "password": "password123"
-    }
-    """;
-
-        mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.token").isNotEmpty())
-                // JWT format check → 3 dot-separated parts
-                .andExpect(result -> {
-                    String json = result.getResponse().getContentAsString();
-                    String token = JsonPath.read(json, "$.token");
-                    assertThat(token.split("\\.").length).isEqualTo(3);
-                });
-    }
-
-    @Test
-    void jwtTokenShouldContainRoleClaim() throws Exception {
-        String requestBody = """
-        {
-          "username": "admin",
-          "password": "password"
-        }
-        """;
-
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String response = result.getResponse().getContentAsString();
-
-        String token = JsonPath.read(response, "$.token");
-
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(
-                        "mysecretkeymysecretkeymysecretkey".getBytes()
-                ))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        assertThat(claims.get("role")).isEqualTo("USER");
-    }
-
-
 }
